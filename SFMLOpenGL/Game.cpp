@@ -9,7 +9,7 @@ double rotationY = 0;
 double rotationZ = 0;
 MyVector3 moving { 0, 0, 0 };
 float scale = 1.0;
-
+bool pressed = false;
 
 Game::Game() : window(VideoMode(800, 600), "OpenGL Cube")
 {
@@ -38,22 +38,59 @@ float vertices[] = { -1.0f,-1.0f,-7.0f, // triangle 1 : begin
 					-1.0f,-1.0f,-7.0f,//6
 					-1.0f, 1.0f, -5.0f,
 					-1.0f,-1.0f, -5.0f,
-					1.0f,-1.0f, -5.0f,
+					1.0f,-1.0f, -5.0f,//7
 					1.0f, 1.0f, -5.0f,
 					1.0f,-1.0f,-7.0f,
-					1.0f, 1.0f,-7.0f,
+					1.0f, 1.0f,-7.0f,//8
 					1.0f,-1.0f,-7.0f,
 					1.0f, 1.0f, -5.0f,
-					1.0f,-1.0f, -5.0f,
+					1.0f,-1.0f, -5.0f,//9
 					1.0f, 1.0f, -5.0f,
 					1.0f, 1.0f,-7.0f,
-					-1.0f, 1.0f,-7.0f,
+					-1.0f, 1.0f,-7.0f,//10
 					1.0f, 1.0f, -5.0f,
 					-1.0f, 1.0f,-7.0f,
-					-1.0f, 1.0f, -5.0f,
+					-1.0f, 1.0f, -5.0f,//11
 					1.0f, 1.0f, -5.0f,
 					-1.0f, 1.0f, -5.0f,
-					1.0f,-1.0f, -5.0f };
+					1.0f,-1.0f, -5.0f };//12
+
+float start[] = { -1.0f,-1.0f,-7.0f, // triangle 1 : begin
+-1.0f,-1.0f, -5.0f,
+-1.0f, 1.0f, -5.0f, // triangle 1 : end
+1.0f, 1.0f,-7.0f, // triangle 2 : begin
+-1.0f,-1.0f,-7.0f,
+-1.0f, 1.0f,-7.0f, // triangle 2 : end
+1.0f,-1.0f, -5.0f,
+-1.0f,-1.0f,-7.0f,
+1.0f,-1.0f,-7.0f,//3
+1.0f, 1.0f,-7.0f,
+1.0f,-1.0f,-7.0f,
+-1.0f,-1.0f,-7.0f,//4
+-1.0f,-1.0f,-7.0f,
+-1.0f, 1.0f, -5.0f,
+-1.0f, 1.0f,-7.0f,//5
+1.0f,-1.0f, -5.0f,
+-1.0f,-1.0f, -5.0f,
+-1.0f,-1.0f,-7.0f,//6
+-1.0f, 1.0f, -5.0f,
+-1.0f,-1.0f, -5.0f,
+1.0f,-1.0f, -5.0f,//7
+1.0f, 1.0f, -5.0f,
+1.0f,-1.0f,-7.0f,
+1.0f, 1.0f,-7.0f,//8
+1.0f,-1.0f,-7.0f,
+1.0f, 1.0f, -5.0f,
+1.0f,-1.0f, -5.0f,//9
+1.0f, 1.0f, -5.0f,
+1.0f, 1.0f,-7.0f,
+-1.0f, 1.0f,-7.0f,//10
+1.0f, 1.0f, -5.0f,
+-1.0f, 1.0f,-7.0f,
+-1.0f, 1.0f, -5.0f,//11
+1.0f, 1.0f, -5.0f,
+-1.0f, 1.0f, -5.0f,
+1.0f,-1.0f, -5.0f };//12
 float colors[] = { 1.0f,  0.0f,  0.0f,
 					1.0f,  0.0f,  0.0f,
 					1.0f,  0.0f,  0.0f,
@@ -116,55 +153,66 @@ void Game::run()
 			{
 				isRunning = false;
 			}
-			if (sf::Keyboard::Z == event.key.code)
+			if (event.type == Event::KeyPressed)
 			{
-				rotationZ += 0.01;
-				if (rotationZ > 360)
+				if (sf::Keyboard::Z == event.key.code)
 				{
-					rotationZ -= 360.0;
+					rotationZ += 0.05;
+					if (rotationZ > 360)
+					{
+						rotationZ -= 360.0;
+					}
+
 				}
-			}
-			if (sf::Keyboard::Y == event.key.code)
-			{
-				rotationY += 0.01;
-				if (rotationY > 360)
+				if (sf::Keyboard::Y == event.key.code)
 				{
-					rotationY -= 360.0;
+					rotationY += 0.05;
+					if (rotationY > 360)
+					{
+						rotationY -= 360.0;
+					}
+
 				}
-			}
-			if (sf::Keyboard::X == event.key.code)
-			{
-				rotationX += 0.01;
-				if (rotationX > 360)
+				if (sf::Keyboard::X == event.key.code)
 				{
-					rotationX -= 360.0;
+					rotationX += 0.05;
+					if (rotationX > 360)
+					{
+						rotationX -= 360.0;
+					}
+
 				}
+				if (sf::Keyboard::Down == event.key.code)
+				{
+					moving.y -= 0.05;
+
+				}
+				if (sf::Keyboard::Up == event.key.code)
+				{
+					moving.y += 0.05;
+
+				}
+				if (sf::Keyboard::Left == event.key.code)
+				{
+					moving.x -= 0.05;
+
+				}
+				if (sf::Keyboard::Right == event.key.code)
+				{
+					moving.x += 0.05;
+
+				}
+				if (sf::Keyboard::S == event.key.code)
+				{
+					scale -= 0.01;
+
+				}
+				if (sf::Keyboard::D == event.key.code)
+				{
+					scale += 0.01;
+				}
+				
 			}
-			if (sf::Keyboard::Down == event.key.code)
-			{
-				moving.y -= 0.01;
-			}
-			if (sf::Keyboard::Up == event.key.code)
-			{
-				moving.y += 0.01;
-			}
-			if (sf::Keyboard::Left == event.key.code)
-			{
-				moving.x -= 0.01;
-			}
-			if (sf::Keyboard::Right == event.key.code)
-			{
-				moving.x += 0.01;
-			}
-			if (sf::Keyboard::S == event.key.code)
-			{
-				scale -= 0.01;
-			}
-			if (sf::Keyboard::D == event.key.code)
-			{
-				scale += 0.01;
-			}
-			
 		}
 		
 		update();
@@ -196,18 +244,21 @@ void Game::update()
 {
 	elapsed = clock.getElapsedTime();
 
-	for (int i = 0; i < 36; i++)
-	{
-		MyVector3 vector{ vertices[i * 3], vertices[i * 3 + 1], vertices[i * 3 + 2] + 6 };
-		vector = MyMatrix3::rotationY(rotationY) * vector;
-		vector = MyMatrix3::rotationX(rotationX) * vector;
-		vector = MyMatrix3::rotationZ(rotationZ) * vector;
-		vector = MyMatrix3::scale(scale) * vector;
-		vector += moving;
-		vertices[i * 3] = vector.x;
-		vertices[i * 3 + 1] = vector.y;
-		vertices[i * 3 + 2] = vector.z - 6;
-	}
+
+		for (int i = 0; i < 36; i++)
+		{
+			MyVector3 vector{ vertices[i * 3], vertices[i * 3 + 1], vertices[i * 3 + 2] + 6 };
+			MyVector3 startingVect{ start[i * 3],start[i * 3 + 1],start[i * 3 + 2] + 6 };
+			vector = MyMatrix3::rotationY(rotationY) * startingVect;
+			vector = MyMatrix3::rotationX(rotationX) * vector;
+			vector = MyMatrix3::rotationZ(rotationZ) * vector;
+			vector = MyMatrix3::scale(scale) * vector;
+			vector += moving;
+			vertices[i * 3] = vector.x;
+			vertices[i * 3 + 1] = vector.y;
+			vertices[i * 3 + 2] = vector.z - 6;
+		}
+	
 
 	cout << "Update up" << endl;
 }
